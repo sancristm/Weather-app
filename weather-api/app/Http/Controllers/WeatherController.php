@@ -18,7 +18,7 @@ class WeatherController extends Controller
             return response()->json(['error' => 'City is required'], 400);
         }
 
-        // Step 1: Get coordinates from city name
+        // Step 1: Geting  coordinates from city name as params sent from the client
         $geo = Http::get("https://api.openweathermap.org/geo/1.0/direct", [
             'q' => $city,
             'limit' => 1,
@@ -33,7 +33,7 @@ class WeatherController extends Controller
         $lat = $location['lat'];
         $lon = $location['lon'];
 
-        // Step 2: Get weather using One Call v3.0
+        // Step 2: Geting weather using One Call v3.0
         $weather = Http::get("https://api.openweathermap.org/data/3.0/onecall", [
             'lat' => $lat,
             'lon' => $lon,
