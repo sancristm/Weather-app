@@ -3,60 +3,79 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Carbon;
 
 class WeatherController extends Controller
 {
-    //
-
-     public function show(Request $request)
+    public function show(Request $request)
     {
         $city = $request->query('city');
+        $units = $request->query('units', 'metric'); // metric or imperial
+        $apiKey = env('OPENWEATHER_API_KEY');
 
         if (!$city) {
             return response()->json(['error' => 'City is required'], 400);
         }
 
-        $apiKey = config('services.openweather.key');
-
-        // Step 1: Get coordinates using Geocoding API
-        $geoResponse = Http::get("http://api.openweathermap.org/geo/1.0/direct", [
+        // Step 1: Get coordinates from city name
+        $geo = Http::get("https://api.openweathermap.org/geo/1.0/direct", [
             'q' => $city,
             'limit' => 1,
             'appid' => $apiKey
         ]);
 
-        if ($geoResponse->failed() || count($geoResponse->json()) === 0) {
+        if ($geo->failed() || count($geo->json()) === 0) {
             return response()->json(['error' => 'City not found'], 404);
         }
 
-        $location = $geoResponse->json()[0];
+        $location = $geo[0];
         $lat = $location['lat'];
         $lon = $location['lon'];
 
-        // Step 2: Get weather using One Call API
-        $weatherResponse = Http::get("https://api.openweathermap.org/data/3.0/onecall", [
+        // Step 2: Get weather using One Call v3.0
+        $weather = Http::get("https://api.openweathermap.org/data/3.0/onecall", [
             'lat' => $lat,
             'lon' => $lon,
-            'units' => $request->query('units', 'metric'),
+            'units' => $units,
             'exclude' => 'minutely,hourly,alerts',
             'appid' => $apiKey
         ]);
 
-        if ($weatherResponse->failed()) {
-            return response()->json(['error' => 'Unable to fetch weather'], 500);
+        if ($weather->failed()) {
+            return response()->json(['error' => 'Could not fetch weather data'], 500);
         }
+
+        $data = $weather->json();
 
         return response()->json([
             'location' => [
-                'name' => $location['name'] ?? $city,
+                'city' => $location['name'] ?? $city,
                 'country' => $location['country'] ?? '',
                 'lat' => $lat,
                 'lon' => $lon,
             ],
-            'weather' => $weatherResponse->json()
+            'current' => [
+                'date' => Carbon::createFromTimestamp($data['current']['dt'])->toDateString(),
+                'temp' => $data['current']['temp'],
+                'description' => $data['current']['weather'][0]['description'],
+                'icon' => $data['current']['weather'][0]['icon'],
+                'humidity' => $data['current']['humidity'],
+                'wind_speed' => $data['current']['wind_speed']
+            ],
+            'forecast' => collect($data['daily'])->take(3)->map(function ($day) {
+                return [
+                    'date' => Carbon::createFromTimestamp($day['dt'])->toDateString(),
+                    'temp' => [
+                        'min' => $day['temp']['min'],
+                        'max' => $day['temp']['max']
+                    ],
+                    'description' => $day['weather'][0]['description'],
+                    'icon' => $day['weather'][0]['icon'],
+                    'humidity' => $day['humidity'],
+                    'wind_speed' => $day['wind_speed']
+                ];
+            })->values()
         ]);
     }
 }
