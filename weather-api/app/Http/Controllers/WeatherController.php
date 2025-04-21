@@ -15,10 +15,13 @@ class WeatherController extends Controller
         $apiKey = env('OPENWEATHER_API_KEY');
 
         if (!$city) {
-            return response()->json(['error' => 'City is required'], 400);
+            return response()->json(['error' => 'City is required'], 400)
+                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+                ->header('Access-Control-Allow-Methods', 'GET')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
         }
 
-        // Step 1: Geting  coordinates from city name as params sent from the client
+        // Step 1: Geting coordinates from city name as params sent from the client
         $geo = Http::get("https://api.openweathermap.org/geo/1.0/direct", [
             'q' => $city,
             'limit' => 1,
@@ -26,7 +29,10 @@ class WeatherController extends Controller
         ]);
 
         if ($geo->failed() || count($geo->json()) === 0) {
-            return response()->json(['error' => 'City not found'], 404);
+            return response()->json(['error' => 'City not found'], 404)
+                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+                ->header('Access-Control-Allow-Methods', 'GET')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
         }
 
         $location = $geo[0];
@@ -43,7 +49,10 @@ class WeatherController extends Controller
         ]);
 
         if ($weather->failed()) {
-            return response()->json(['error' => 'Could not fetch weather data'], 500);
+            return response()->json(['error' => 'Could not fetch weather data'], 500)
+                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+                ->header('Access-Control-Allow-Methods', 'GET')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
         }
 
         $data = $weather->json();
@@ -76,6 +85,9 @@ class WeatherController extends Controller
                     'wind_speed' => $day['wind_speed']
                 ];
             })->values()
-        ]);
+        ])
+        ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
+        ->header('Access-Control-Allow-Methods', 'GET')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
     }
 }

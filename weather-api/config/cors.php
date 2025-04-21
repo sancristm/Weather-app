@@ -7,31 +7,25 @@ return [
     | Cross-Origin Resource Sharing (CORS) Configuration
     |--------------------------------------------------------------------------
     |
-    | Here you may configure  settings for cross-origin resource sharing.
-    | This determines what cross‑origin operations may execute in web browsers.
+    | This config applies CORS headers to all routes and allows any origin,
+    | useful for local development. Lock this down for production!
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['*'], // 👈 Allow CORS on all routes in development mode
 
-    'allowed_methods' => ['*'],
-    
-    // 'allowed_origins' => ['http://localhost:3000', 'http://127.0.0.1:3000'],
+    'allowed_methods' => ['*'], // 👈 Allow all HTTP methods
 
-
-    'allowed_origins'=>['*'],
-
+    'allowed_origins' => ['*'], // 👈 Allow any frontend origin
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => ['*'], // 👈 Allow all headers
 
     'exposed_headers' => [],
 
     'max_age' => 0,
 
     'supports_credentials' => false,
-
 ];
-
 

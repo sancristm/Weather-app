@@ -8,16 +8,29 @@ export default function Home() {
   const [weather, setWeather] = useState<any>(null);
 
   const fetchWeather = async () => {
-    const res = await fetch(
-      `http://localhost:8000/api/weather?city=Nairobi&units=metric`,
-      {
-        method: 'GET',
-        mode: 'cors',
-      }
-    );
+    try {
+      // Use the actual city and unit values from state
+      const res = await fetch(
+        `http://localhost:8000/api/weather?city=${city}&units=${unit}`,
+        {
+          method: 'GET',
+          // Don't explicitly set mode to anything
+          headers: {
+            Accept: 'application/json',
+          },
+        }
+      );
 
-    const data = await res.json();
-    console.log(data);
+      if (!res.ok) {
+        throw new Error(`Error: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setWeather(data);
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching weather:', error);
+    }
   };
 
   return (
