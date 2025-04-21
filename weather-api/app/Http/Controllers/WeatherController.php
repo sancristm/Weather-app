@@ -15,13 +15,10 @@ class WeatherController extends Controller
         $apiKey = env('OPENWEATHER_API_KEY');
 
         if (!$city) {
-            return response()->json(['error' => 'City is required'], 400)
-                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-                ->header('Access-Control-Allow-Methods', 'GET')
-                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
+            return response()->json(['error' => 'City is required'], 400);
         }
 
-        // Step 1: Geting coordinates from city name as params sent from the client
+        // Step 1: Get coordinates from city name
         $geo = Http::get("https://api.openweathermap.org/geo/1.0/direct", [
             'q' => $city,
             'limit' => 1,
@@ -29,17 +26,14 @@ class WeatherController extends Controller
         ]);
 
         if ($geo->failed() || count($geo->json()) === 0) {
-            return response()->json(['error' => 'City not found'], 404)
-                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-                ->header('Access-Control-Allow-Methods', 'GET')
-                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
+            return response()->json(['error' => 'City not found'], 404);
         }
 
         $location = $geo[0];
         $lat = $location['lat'];
         $lon = $location['lon'];
 
-        // Step 2: Geting weather using One Call v3.0
+        // Step 2: Get weather using One Call v3.0
         $weather = Http::get("https://api.openweathermap.org/data/3.0/onecall", [
             'lat' => $lat,
             'lon' => $lon,
@@ -49,10 +43,7 @@ class WeatherController extends Controller
         ]);
 
         if ($weather->failed()) {
-            return response()->json(['error' => 'Could not fetch weather data'], 500)
-                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-                ->header('Access-Control-Allow-Methods', 'GET')
-                ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
+            return response()->json(['error' => 'Could not fetch weather data'], 500);
         }
 
         $data = $weather->json();
@@ -85,9 +76,6 @@ class WeatherController extends Controller
                     'wind_speed' => $day['wind_speed']
                 ];
             })->values()
-        ])
-        ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-        ->header('Access-Control-Allow-Methods', 'GET')
-        ->header('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin');
+        ]);
     }
 }

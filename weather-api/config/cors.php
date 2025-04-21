@@ -7,20 +7,24 @@ return [
     | Cross-Origin Resource Sharing (CORS) Configuration
     |--------------------------------------------------------------------------
     |
-    | This config applies CORS headers to all routes and allows any origin,
-    | useful for local development. Lock this down for production!
+    | Here you may configure your settings for cross-origin resource sharing
+    | or "CORS". This determines what cross-origin operations may execute
+    | in web browsers. You are free to adjust these settings as needed.
+    |
+    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
     |
     */
 
-    'paths' => ['*'], // 👈 Allow CORS on all routes in development mode
 
-    'allowed_methods' => ['*'], // 👈 Allow all HTTP methods
+    'paths' => ['api/*'],
 
-    'allowed_origins' => ['*'], // 👈 Allow any frontend origin
+    'allowed_methods' => ['*'],
+
+    'allowed_origins' => ['http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'], // 👈 Allow all headers
+    'allowed_headers' => ['*'],
 
     'exposed_headers' => [],
 
@@ -28,4 +32,3 @@ return [
 
     'supports_credentials' => false,
 ];
-
