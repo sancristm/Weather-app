@@ -14,7 +14,8 @@ export async function fetchWeather(
   );
 
   if (!response.ok) {
-    throw new Error(`Error fetching weather: ${response.statusText}`);
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Something went wrong');
   }
 
   return await response.json();

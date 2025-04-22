@@ -22,8 +22,13 @@ export default function HomePage() {
     try {
       const data = await fetchWeather(city, unit);
       setWeather(data);
-    } catch (err) {
-      setError('Failed to fetch weather. Please try again.');
+    } catch (err: any) {
+      console.log(err);
+
+      //  Extract error message from the laravel server
+      const message = err?.message || 'Something went wrong. Please try again.';
+      setError(message);
+      setWeather(null);
     } finally {
       setLoading(false);
     }
@@ -39,14 +44,18 @@ export default function HomePage() {
   return (
     <main className='min-h-screen bg-gradient-to-br from-sky-100 to-indigo-100 text-gray-800 p-6'>
       <div className='max-w-4xl mx-auto space-y-6'>
-        <h1 className='text-4xl font-bold text-center'>☁️ Weather App</h1>
+        <h1 className='text-4xl font-bold text-center'> Weather App</h1>
 
         <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
           <SearchBar onSearch={handleSearch} />
           <UnitToggle unit={unit} onToggle={handleToggleUnit} />
         </div>
 
-        {error && <p className='text-center text-red-600'>{error}</p>}
+        {error && (
+          <div className='bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-md text-center'>
+            <strong className='font-semibold'>Error:</strong> {error}
+          </div>
+        )}
 
         {loading ? (
           <>
