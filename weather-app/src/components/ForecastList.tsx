@@ -1,21 +1,37 @@
-import { ForecastItem } from '@/types/weather';
+'use client';
 
-interface ForecastListProps {
-  forecast: ForecastItem[];
+import React from 'react';
+import { ForecastDay } from '@/types/weather';
+
+interface Props {
+  forecast: ForecastDay[];
   unit: 'metric' | 'imperial';
 }
 
-export default function ForecastList({ forecast, unit }: ForecastListProps) {
+export default function ForecastList({ forecast, unit }: Props) {
+  const unitSymbol = unit === 'metric' ? '°C' : '°F';
+
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6'>
-      {forecast.map((day, idx) => (
-        <div key={idx} className='card bg-base-200 p-4 text-center'>
-          <p className='font-semibold'>{day.date}</p>
-          <img src={day.icon} alt='' className='mx-auto w-10 h-10' />
+    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
+      {forecast.map((day, index) => (
+        <div key={index} className='p-4 bg-white shadow-md rounded-lg'>
+          <p className='font-semibold text-lg'>{day.date}</p>
+          <img
+            src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
+            alt={day.description}
+            className='w-16 h-16'
+          />
+          <p>{day.description}</p>
           <p>
-            {day.temp}° {unit === 'metric' ? 'C' : 'F'}
+            <span className='font-medium'>Min:</span> {day.temp.min}
+            {unitSymbol}
           </p>
-          <p className='capitalize text-xs'>{day.description}</p>
+          <p>
+            <span className='font-medium'>Max:</span> {day.temp.max}
+            {unitSymbol}
+          </p>
+          <p>Humidity: {day.humidity}%</p>
+          <p>Wind: {day.wind_speed} m/s</p>
         </div>
       ))}
     </div>

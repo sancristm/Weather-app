@@ -1,17 +1,20 @@
-export interface WeatherData {
-  forecast: ForecastItem[];
-  city: string;
+export interface ForecastDay {
   date: string;
-  temp: number;
-  humidity: number;
-  windSpeed: number;
+  temp: {
+    min: number;
+    max: number;
+  };
   description: string;
   icon: string;
+  humidity: number;
+  wind_speed: number;
 }
 
-export interface ForecastItem {
-  date: string;
-  temp: number;
-  description: string;
-  icon: string;
+export interface WeatherData {
+  city: string;
+  country: string;
+  lat: number;
+  lon: number;
+  current: ForecastDay;
+  forecast: ForecastDay[];
 }
