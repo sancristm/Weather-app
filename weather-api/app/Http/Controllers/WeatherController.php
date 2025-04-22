@@ -63,6 +63,7 @@ class WeatherController extends Controller
                 'humidity' => $data['current']['humidity'],
                 'wind_speed' => $data['current']['wind_speed']
             ],
+            //forcasting for 3 days i.e (limit:3)
             'forecast' => collect($data['daily'])->take(3)->map(function ($day) {
                 return [
                     'date' => Carbon::createFromTimestamp($day['dt'])->toDateString(),

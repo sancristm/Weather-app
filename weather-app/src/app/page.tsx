@@ -1,60 +1,53 @@
 'use client';
 
 import { useState } from 'react';
+import SearchBar from '@/components/SearchBar';
+import UnitToggle from '@/components/UnitToggle';
+import WeatherCard from '@/components/WeatherCard';
+import ForecastList from '@/components/ForecastList';
+import { fetchWeather } from '@/lib/weatherApi';
+import { WeatherData } from '@/types/weather';
 
-export default function Home() {
-  const [city, setCity] = useState('Nairobi');
+export default function HomePage() {
   const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
-  const [weather, setWeather] = useState<any>(null);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const fetchWeather = async () => {
+  const handleSearch = async (city: string) => {
+    setLoading(true);
+    setError('');
     try {
-      // Use the actual city and unit values from state
-      const res = await fetch(
-        `http://localhost:8000/api/weather?city=${city}&units=${unit}`,
-        {
-          method: 'GET',
-          // Don't explicitly set mode to anything
-          headers: {
-            Accept: 'application/json',
-          },
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error(`Error: ${res.status}`);
-      }
-
-      const data = await res.json();
+      const data = await fetchWeather(city, unit);
       setWeather(data);
-      console.log(data);
-    } catch (error) {
-      console.error('Error fetching weather:', error);
+    } catch (err) {
+      setError('Failed to fetch weather. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleToggleUnit = (newUnit: 'metric' | 'imperial') => {
+    setUnit(newUnit);
+    if (weather) {
+      handleSearch(weather.city);
     }
   };
 
   return (
-    <main className='p-4 max-w-xl mx-auto'>
-      <div className='flex gap-2 mb-4'>
-        <input
-          className='input input-bordered flex-1'
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <button className='btn btn-primary' onClick={fetchWeather}>
-          Search
-        </button>
-      </div>
+    <main className='min-h-screen p-6 space-y-4'>
+      <h1 className='text-3xl font-bold'>Weather App</h1>
+      <SearchBar onSearch={handleSearch} />
+      <UnitToggle unit={unit} onToggle={handleToggleUnit} />
+
+      {loading && <p className='text-info'>Loading...</p>}
+      {error && <p className='text-error'>{error}</p>}
 
       {weather && (
-        <div className='card p-4'>
-          <h2 className='font-bold text-lg'>
-            {weather.location.city}, {weather.location.country}
-          </h2>
-          <p>
-            {weather.current.temp}° — {weather.current.description}
-          </p>
-        </div>
+        <>
+          <WeatherCard data={weather} unit={unit} />
+          <ForecastList forecast={weather.forecast} unit={unit} />
+        </>
       )}
     </main>
   );
