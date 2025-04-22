@@ -9,6 +9,7 @@ import { fetchWeather } from '@/lib/weatherApi';
 import { WeatherData } from '@/types/weather';
 import WeatherCardSkeleton from '@/components/WeatherCardSkeleton';
 import ForecastSkeleton from '@/components/ForecastSkeleton';
+import Footer from '@/components/Footer';
 
 export default function HomePage() {
   const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
@@ -74,6 +75,7 @@ export default function HomePage() {
           )
         )}
       </div>
+      <Footer />
     </main>
   );
 }
