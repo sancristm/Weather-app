@@ -23,11 +23,10 @@ export default function HomePage() {
     try {
       const data = await fetchWeather(city, unit);
       setWeather(data);
-    } catch (err: any) {
-      console.log(err);
-
+    } catch (error: any) {
       //  Extract error message from the laravel server
-      const message = err?.message || 'Something went wrong. Please try again.';
+      const message =
+        error?.message || 'Something went wrong. Please try again.';
       setError(message);
       setWeather(null);
     } finally {
