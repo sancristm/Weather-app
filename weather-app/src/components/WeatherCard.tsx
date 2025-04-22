@@ -1,29 +1,42 @@
+'use client';
+
+import React from 'react';
 import { WeatherData } from '@/types/weather';
 
-interface WeatherCardProps {
+interface Props {
   data: WeatherData;
   unit: 'metric' | 'imperial';
 }
 
-export default function WeatherCard({ data, unit }: WeatherCardProps) {
+export default function WeatherCard({ data, unit }: Props) {
+  const unitSymbol = unit === 'metric' ? '°C' : '°F';
+
   return (
-    <div className='card w-full max-w-md bg-base-100 shadow-xl p-4'>
-      <div className='flex justify-between items-center'>
+    <div className='p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto'>
+      <h2 className='text-2xl font-bold mb-2'>
+        {data.location.city}, {data.location.country}
+      </h2>
+      <p className='text-gray-500 mb-4'>{data.current.date}</p>
+
+      <div className='flex items-center gap-4'>
+        <img
+          src={`https://openweathermap.org/img/wn/${data.current.icon}@2x.png`}
+          alt={data.current.description}
+          className='w-20 h-20'
+        />
+
         <div>
-          <h2 className='text-xl font-semibold'>{data.city}</h2>
-          <p>{data.date}</p>
-          <p className='capitalize'>{data.description}</p>
+          <p className='text-4xl font-semibold'>
+            {data.current.temp}
+            {unitSymbol}
+          </p>
+          <p className='capitalize text-gray-700'>{data.current.description}</p>
         </div>
-        <img src={data.icon} alt='Weather icon' className='w-16 h-16' />
       </div>
-      <div className='mt-4 text-4xl font-bold'>
-        {data.temp}° {unit === 'metric' ? 'C' : 'F'}
-      </div>
-      <div className='mt-2 text-sm'>
-        <p>Humidity: {data.humidity}%</p>
-        <p>
-          Wind: {data.windSpeed} {unit === 'metric' ? 'm/s' : 'mph'}
-        </p>
+
+      <div className='mt-4 space-y-1 text-sm text-gray-600'>
+        <p>Humidity: {data.current.humidity}%</p>
+        <p>Wind speed: {data.current.wind_speed} m/s</p>
       </div>
     </div>
   );

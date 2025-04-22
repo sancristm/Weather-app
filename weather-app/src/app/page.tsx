@@ -7,6 +7,8 @@ import WeatherCard from '@/components/WeatherCard';
 import ForecastList from '@/components/ForecastList';
 import { fetchWeather } from '@/lib/weatherApi';
 import { WeatherData } from '@/types/weather';
+import WeatherCardSkeleton from '@/components/WeatherCardSkeleton';
+import ForecastSkeleton from '@/components/ForecastSkeleton';
 
 export default function HomePage() {
   const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
@@ -30,25 +32,39 @@ export default function HomePage() {
   const handleToggleUnit = (newUnit: 'metric' | 'imperial') => {
     setUnit(newUnit);
     if (weather) {
-      handleSearch(weather.city);
+      handleSearch(weather.location.city);
     }
   };
 
   return (
-    <main className='min-h-screen p-6 space-y-4'>
-      <h1 className='text-3xl font-bold'>Weather App</h1>
-      <SearchBar onSearch={handleSearch} />
-      <UnitToggle unit={unit} onToggle={handleToggleUnit} />
+    <main className='min-h-screen bg-gradient-to-br from-sky-100 to-indigo-100 text-gray-800 p-6'>
+      <div className='max-w-4xl mx-auto space-y-6'>
+        <h1 className='text-4xl font-bold text-center'>☁️ Weather App</h1>
 
-      {loading && <p className='text-info'>Loading...</p>}
-      {error && <p className='text-error'>{error}</p>}
+        <div className='flex flex-col md:flex-row justify-between items-center gap-4'>
+          <SearchBar onSearch={handleSearch} />
+          <UnitToggle unit={unit} onToggle={handleToggleUnit} />
+        </div>
 
-      {weather && (
-        <>
-          <WeatherCard data={weather} unit={unit} />
-          <ForecastList forecast={weather.forecast} unit={unit} />
-        </>
-      )}
+        {error && <p className='text-center text-red-600'>{error}</p>}
+
+        {loading ? (
+          <>
+            <WeatherCardSkeleton />
+            <ForecastSkeleton />
+          </>
+        ) : (
+          weather && (
+            <>
+              <WeatherCard data={weather} unit={unit} />
+              <h2 className='text-xl font-semibold mt-8'>
+                3-Day Forecast in {weather.location.city} would likely be:
+              </h2>
+              <ForecastList forecast={weather.forecast} unit={unit} />
+            </>
+          )
+        )}
+      </div>
     </main>
   );
 }
