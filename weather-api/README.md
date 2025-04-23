@@ -1,61 +1,88 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Weather API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple API that provides weather information for various cities.
 
-## About Laravel
+## API Documentation
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### GET /api/weather
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This endpoint retrieves current weather information and forecast data for a specified city.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Request
 
-## Learning Laravel
+-   **Method:** GET
+-   **URL:** `http://localhost:8000/api/weather`
+-   **Query Parameters:**
+    -   `city` (string, required): The name of the city for which weather information is requested.
+    -   `units` (string, required): The unit of measurement for the temperature (e.g., 'metric', 'imperial').
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### Example Request
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```
+GET http://localhost:8000/api/weather?city=London&units=metric
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### Response
 
-## Laravel Sponsors
+The response will be in JSON format with the following structure:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```json
+{
+    "location": {
+        "city": "London",
+        "country": "GB",
+        "lat": 51.5074,
+        "lon": -0.1278
+    },
+    "current": {
+        "date": "2025-04-23",
+        "temp": 18.5,
+        "description": "Partly cloudy",
+        "icon": "02d",
+        "humidity": 65,
+        "wind_speed": 4.2
+    },
+    "forecast": [
+        {
+            "date": "2025-04-24",
+            "temp": {
+                "min": 16.2,
+                "max": 22.5
+            },
+            "description": "Sunny",
+            "icon": "01d",
+            "humidity": 58,
+            "wind_speed": 3.7
+        }
+        // Additional forecast days...
+    ]
+}
+```
 
-### Premium Partners
+#### Response Fields
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+**Location Object**
 
-## Contributing
+-   `city` (string): The name of the requested city
+-   `country` (string): The country code where the city is located
+-   `lat` (number): The latitude coordinate of the city
+-   `lon` (number): The longitude coordinate of the city
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Current Object**
 
-## Code of Conduct
+-   `date` (string): The current date in YYYY-MM-DD format
+-   `temp` (number): The current temperature in the requested units
+-   `description` (string): A text description of the current weather
+-   `icon` (string): Weather condition icon code
+-   `humidity` (number): The current humidity percentage
+-   `wind_speed` (number): The current wind speed in the requested units
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Forecast Array**
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+-   Array of forecast objects, each containing:
+    -   `date` (string): Forecast date in YYYY-MM-DD format
+    -   `temp` (object): Contains `min` and `max` temperature values for the day
+    -   `description` (string): A text description of the forecasted weather
+    -   `icon` (string): Weather condition icon code
+    -   `humidity` (number): The forecasted humidity percentage
+    -   `wind_speed` (number): The forecasted wind speed
