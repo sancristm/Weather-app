@@ -5,9 +5,8 @@ Weather app using Open WeathermapAPI
 
 # Weather App Frontend
 
-A modern weather application built with Next.js and TypeScript that displays current weather and forecast data.
+A weather application built with Next.js and TypeScript that displays current weather and forecast data.
 
-![Weather App Screenshot](https://via.placeholder.com/800x400?text=Weather+App+Screenshot)
 
 ## Features
 
