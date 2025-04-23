@@ -32,6 +32,7 @@ EXPOSE 8080
 
 # Start Apache in foreground
 RUN apachectl configtest
-CMD ["apache2-foreground"]
+
+ENTRYPOINT ["apache2-foreground"]
 
 
