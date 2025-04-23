@@ -1,5 +1,78 @@
 # Weather API
 
+A simple API that provides weather information for various cities.
+
+## Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/yourusername/weather-api.git
+    cd weather-api
+    ```
+
+2. Install PHP dependencies:
+
+    ```bash
+    composer install
+    ```
+
+3. Copy the environment file:
+
+    ```bash
+    cp .env.example .env
+    ```
+
+4. Generate application key:
+
+    ```bash
+    php artisan key:generate
+    ```
+
+5. Configure your database in the `.env` file:
+
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=weather_api
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+
+6. Run database migrations:
+    ```bash
+    php artisan migrate
+    ```
+
+## Configuration
+
+1. Obtain an API key from [OpenWeatherMap](https://openweathermap.org/api)
+
+2. Add your API key to the `.env` file:
+
+    ```
+    WEATHER_API_KEY=your_api_key_here
+    WEATHER_API_URL=https://api.openweathermap.org/data/3.0
+    ```
+
+3. Configure caching (optional):
+    ```
+    WEATHER_CACHE_DURATION=60  # Duration in minutes
+    ```
+
+## Running the Application
+
+1. Start the development server:
+
+    ```bash
+    php artisan serve
+    ```
+
+2. The API will be available at `http://localhost:8000`
+
+# Weather API
+
 A simple API that provides weather information for various cities using openweather Api
 
 ## API Documentation
