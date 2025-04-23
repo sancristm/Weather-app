@@ -29,32 +29,53 @@ The response will be in JSON format with the following structure:
 ```json
 {
     "location": {
-        "city": "London",
-        "country": "GB",
-        "lat": 51.5074,
-        "lon": -0.1278
+        "city": "Lodon",
+        "country": "IN",
+        "lat": 23.7716093,
+        "lon": 76.3530815
     },
     "current": {
         "date": "2025-04-23",
-        "temp": 18.5,
-        "description": "Partly cloudy",
-        "icon": "02d",
-        "humidity": 65,
-        "wind_speed": 4.2
+        "temp": 30.29,
+        "description": "clear sky",
+        "icon": "01d",
+        "humidity": 9,
+        "wind_speed": 2.05
     },
     "forecast": [
         {
+            "date": "2025-04-23",
+            "temp": {
+                "min": 28.61,
+                "max": 40.42
+            },
+            "description": "clear sky",
+            "icon": "01d",
+            "humidity": 5,
+            "wind_speed": 4.84
+        },
+        {
             "date": "2025-04-24",
             "temp": {
-                "min": 16.2,
-                "max": 22.5
+                "min": 27.17,
+                "max": 41.06
             },
-            "description": "Sunny",
+            "description": "clear sky",
             "icon": "01d",
-            "humidity": 58,
-            "wind_speed": 3.7
+            "humidity": 5,
+            "wind_speed": 5.21
+        },
+        {
+            "date": "2025-04-25",
+            "temp": {
+                "min": 27.73,
+                "max": 41.71
+            },
+            "description": "clear sky",
+            "icon": "01d",
+            "humidity": 9,
+            "wind_speed": 7.2
         }
-        // Additional forecast days...
     ]
 }
 ```
