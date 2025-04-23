@@ -1,6 +1,6 @@
 # Weather API
 
-A simple API that provides weather information for various cities.
+A simple API that provides weather information for various cities using openweather Api
 
 ## API Documentation
 
