@@ -28,7 +28,7 @@ class Cors
     private function corsHeaders(): array
     {
         return [
-            'Access-Control-Allow-Origin' => 'http://localhost:3000',
+            'Access-Control-Allow-Origin' => '*',
             'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE, OPTIONS',
             'Access-Control-Allow-Headers' => 'Content-Type, Accept, Authorization, X-Requested-With',
         ];
