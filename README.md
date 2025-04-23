@@ -118,6 +118,9 @@ weather-app/
 ## API Integration
 
 The application uses a custom API client in `src/lib/weatherApi.ts` to fetch weather data from the backend. The `fetchWeather` function handles requests to the backend API with city and unit parameters.
+The Api response might loook like this:(just incase)
+
+![image](https://github.com/user-attachments/assets/d8170d5c-b2b9-486d-8174-17fc27cabe29)
 
 ## Adding New Features
 
