@@ -31,6 +31,7 @@ COPY ./docker/apache.conf /etc/apache2/sites-available/000-default.conf
 EXPOSE 8080
 
 # Start Apache in foreground
+RUN apachectl configtest
 CMD ["apache2-foreground"]
 
 
